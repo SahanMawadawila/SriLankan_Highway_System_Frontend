@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -7,10 +7,10 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "../components/ui/navigation-menu";
-import { LoginModal } from "../components/ui/modal";
+} from "../ui/navigation-menu";
+import { LoginModal } from "./modal";
 import { useState } from "react";
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 
 export function Navbar() {
   const [showLoginModal, setShowLoginModal] = useState(false);

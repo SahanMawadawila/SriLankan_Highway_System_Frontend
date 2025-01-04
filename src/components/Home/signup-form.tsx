@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { cn } from "../lib/utils";
-import { Button } from "../components/ui/button";
-import { Card, CardContent } from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Camera } from "lucide-react";
 
 export function SignUpForm({

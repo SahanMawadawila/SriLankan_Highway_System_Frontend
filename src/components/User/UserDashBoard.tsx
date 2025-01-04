@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "../app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,15 +6,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from "../ui/breadcrumb";
+import { Separator } from "../ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
+import { useAuth } from "../../hooks/useAuth";
 
-export default function DashBoard() {
+export default function UserDashBoard() {
+  const { accessToken } = useAuth();
   return (
     <SidebarProvider>
       <AppSidebar />

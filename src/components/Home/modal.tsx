@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
-import { LoginForm } from "../../Home/login-form";
-import { SignUpForm } from "../../Home/signup-form";
+import { LoginForm } from "./login-form";
+import { SignUpForm } from "./signup-form";
 
 interface LoginModalProps {
   isOpen: boolean;
