@@ -6,22 +6,69 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Camera } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { axiosPublic } from "../../api/axios";
+
+const schema = z
+  .object({
+    email: z.string().email("Invalid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
+
+type SignUpFormValues = z.infer<typeof schema>;
 
 export function SignUpForm({
   className,
   onBack,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & { onBack: () => void }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormValues>({
+    resolver: zodResolver(schema),
+  });
   const [photo, setPhoto] = useState<string | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhoto(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      if (file.size > 1024 * 1024 * 1) {
+        setPhotoError("File size must be less than 1MB");
+        return;
+      }
+
+      setPhotoError(null);
+      setPhoto(URL.createObjectURL(file));
+      setPhotoFile(file);
+    }
+  };
+
+  const onSubmit = async (data: SignUpFormValues) => {
+    if (!photoFile) {
+      setPhotoError("Please upload a photo");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image", photoFile!);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+
+    try {
+      const response = await axiosPublic.post("/signup", formData);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -29,7 +76,7 @@ export function SignUpForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 grid gap-4">
+          <form className="p-6 grid gap-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col items-center text-center">
               <h1 className="text-2xl font-bold">Create an account</h1>
               <p className="text-balance text-muted-foreground">
@@ -59,22 +106,51 @@ export function SignUpForm({
                 </Label>
               </div>
             </div>
+            {photoError && (
+              <p className="text-xs text-error text-red-500">{photoError}</p>
+            )}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                {...register("email")}
                 required
               />
+              {errors.email && (
+                <p className="text-xs text-error text-red-500">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                required
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-xs text-error text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input id="confirm-password" type="password" required />
+              <Input
+                id="confirm-password"
+                type="password"
+                required
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-xs text-error text-red-500">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
             <Button type="submit" className="w-full">
               Sign Up
