@@ -6,10 +6,12 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Camera } from "lucide-react";
+//react hook form is used to handle validation and form submission, it will not allow the form to be submitted if there are any errors. the main advantage of using react hook form is that it will not re-render the component like we do in the traditional way of handling forms in react using state.every time we type something in the input field the component will re-render and the state will be updated but in react hook form it will not re-render every time we type something in the input field.
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { axiosPublic } from "../../api/axios";
+import { toast } from "react-toastify";
 
 const schema = z
   .object({
@@ -32,6 +34,8 @@ export function SignUpForm({
   const {
     register,
     handleSubmit,
+    setError,
+    reset,
     formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(schema),
@@ -66,9 +70,33 @@ export function SignUpForm({
 
     try {
       const response = await axiosPublic.post("/signup", formData);
-      console.log(response);
-    } catch (e) {
-      console.log(e);
+      toast.success(response.data.message);
+      //clear the form
+      setPhoto(null);
+      setPhotoFile(null);
+      reset();
+      onBack();
+    } catch (e: unknown) {
+      const BackendErrors = e.response.data.errors;
+      if (BackendErrors) {
+        BackendErrors.forEach((error: { field: string; message: string }) => {
+          if (error.field === "form") {
+            toast.error(error.message);
+          } else if (error.field === "image") {
+            setPhotoError(error.message);
+          } else if (error.field === "email") {
+            setError("email", {
+              type: "manual",
+              message: error.message,
+            });
+          } else if (error.field === "password") {
+            setError("password", {
+              type: "manual",
+              message: error.message,
+            });
+          }
+        });
+      }
     }
   };
 
