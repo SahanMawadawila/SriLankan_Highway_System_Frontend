@@ -9,10 +9,8 @@ import {
 } from "../ui/breadcrumb";
 import { Separator } from "../ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
-import { useAuth } from "../../hooks/useAuth";
 
 export default function UserDashBoard() {
-  const { accessToken } = useAuth();
   return (
     <SidebarProvider>
       <AppSidebar />

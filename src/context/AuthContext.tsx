@@ -13,6 +13,7 @@ interface AuthContextType {
     email: string
   ) => void;
   logout: () => void;
+  accessTokenChanger: (accessToken: string) => void;
 }
 
 const initialAuthContext: AuthContextType = {
@@ -23,6 +24,7 @@ const initialAuthContext: AuthContextType = {
   email: "",
   login: () => {},
   logout: () => {},
+  accessTokenChanger: () => {},
 };
 
 const AuthContext = createContext(initialAuthContext);
@@ -65,8 +67,14 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     });
   };
 
+  const accessTokenChanger = (accessToken: string) => {
+    setAuth({ ...auth, accessToken });
+  };
+
   return (
-    <AuthContext.Provider value={{ ...auth, login, logout }}>
+    <AuthContext.Provider
+      value={{ ...auth, login, logout, accessTokenChanger }}
+    >
       {children}
     </AuthContext.Provider>
   );

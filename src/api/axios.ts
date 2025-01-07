@@ -11,4 +11,4 @@ export const axiosPrivate = axios.create({
   withCredentials: true,
 });
 //signin and signup routes use axiosPublic
-//all other routes use axiosPrivate
+//all other routes use axiosPrivate. with credentials true does not need other routes, accept refresh token route. other route will use access token

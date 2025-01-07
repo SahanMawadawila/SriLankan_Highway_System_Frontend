@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import UserDashBoard from "./components/User/UserDashBoard";
 import { RequireAuth } from "./components/RequireAuth";
+import { UserDetailsFetch } from "./components/User/UserDetailsFetch";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         </Route>
         <Route path="/user">
           <Route element={<RequireAuth allowedRole={2024} />}>
-            <Route index element={<UserDashBoard />} />
+            <Route index element={<UserDetailsFetch />} />
           </Route>
         </Route>
       </Routes>
