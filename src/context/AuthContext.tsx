@@ -5,7 +5,13 @@ interface AuthContextType {
   role: number;
   photo_url: string;
   accessToken: string;
-  login: (roleNumber: number, photo_url: string, accessToken: string) => void;
+  email: string;
+  login: (
+    roleNumber: number,
+    photo_url: string,
+    accessToken: string,
+    email: string
+  ) => void;
   logout: () => void;
 }
 
@@ -14,6 +20,7 @@ const initialAuthContext: AuthContextType = {
   role: 0,
   accessToken: "",
   photo_url: "",
+  email: "",
   login: () => {},
   logout: () => {},
 };
@@ -29,19 +36,22 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     role: 0,
     photo_url: "",
     isAuthenticated: false,
+    email: "",
     accessToken: "",
   });
 
   const login = (
     roleNumber: number,
     photo_url: string,
-    accessToken: string
+    accessToken: string,
+    email: string
   ) => {
     setAuth({
       role: roleNumber,
       photo_url: photo_url,
       isAuthenticated: true,
       accessToken: accessToken,
+      email: email,
     });
   };
 
@@ -51,6 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       photo_url: "",
       isAuthenticated: false,
       accessToken: "",
+      email: "",
     });
   };
 

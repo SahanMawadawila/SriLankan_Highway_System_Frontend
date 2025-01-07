@@ -33,9 +33,9 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Sri Lankan Highway",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "Government",
     },
     {
       name: "Acme Corp.",
@@ -165,7 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
