@@ -4,7 +4,7 @@ import { useAuth } from "./useAuth";
 export function useRefreshToken() {
   const { accessTokenChanger } = useAuth();
 
-  const refreshToken = async () => {
+  const newAccessToken = async () => {
     try {
       const response = await axiosPrivate.post("/refresh");
       accessTokenChanger(response.data.accessToken);
@@ -12,5 +12,5 @@ export function useRefreshToken() {
       console.log(e);
     }
   };
-  return refreshToken;
+  return newAccessToken; //this is a hook return a function
 }
