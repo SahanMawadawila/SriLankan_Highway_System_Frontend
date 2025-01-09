@@ -41,7 +41,13 @@ export function LoginForm({
       });
       const { accessToken, role, photo_url, email } = response.data;
       login(role, photo_url, accessToken, email);
-      navigate("/user");
+      if (role === 2024) {
+        navigate("/user");
+      } else if (role === 5401) {
+        navigate("/admin");
+      } else if (role === 4048) {
+        navigate("/police");
+      }
     } catch (e: unknown) {
       const BackendErrors = e.response.data.errors;
       if (BackendErrors) {
