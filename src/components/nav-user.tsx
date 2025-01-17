@@ -16,10 +16,31 @@ import {
   useSidebar,
 } from "../components/ui/sidebar";
 import { useAuth } from "../hooks/useAuth";
+import { useAxiosPrivateWithAccessToken } from "../hooks/axios-private-with-access-token";
+import { replace, useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { useLocation } from "react-router-dom";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { photo_url, email } = useAuth();
+  const location = useLocation();
+
+  //logout
+  const { logout } = useAuth();
+  const axiosPrivateWithAccessToken = useAxiosPrivateWithAccessToken();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axiosPrivateWithAccessToken.post("/signout");
+      logout();
+      navigate("/");
+    } catch (e: unknown) {
+      console.error(e);
+      navigate("/", { state: { from: location }, replace: true }); //redirect to login page if the refresh token also expired
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -62,8 +83,10 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem>
-              <LogOut />
-              Log out
+              <Button size="sm" className="w-full" onClick={handleLogout}>
+                <LogOut className="size-4" />
+                Logout
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

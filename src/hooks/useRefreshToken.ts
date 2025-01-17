@@ -8,6 +8,7 @@ export function useRefreshToken() {
     try {
       const response = await axiosPrivate.post("/refresh");
       accessTokenChanger(response.data.accessToken);
+      return response.data.accessToken;
     } catch (e) {
       console.log(e);
     }
