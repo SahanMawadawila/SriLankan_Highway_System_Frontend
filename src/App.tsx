@@ -22,6 +22,7 @@ import { AdminNotifications } from "./components/Admin/notifications";
 import { TrackUser } from "./components/Police/Track-user";
 import { PoliceNotifications } from "./components/Police/Notifications";
 import { Messages } from "./components/Police/Messages";
+import { SingleInterchange } from "./components/Admin/single-interchange";
 
 function App() {
   return (
@@ -57,6 +58,10 @@ function App() {
                 <Route path="vehicle" element={<VerifyVehicle />} />
               </Route>
               <Route path="notifications" element={<AdminNotifications />} />
+              <Route
+                path="interchanges/:interchangeName"
+                element={<SingleInterchange />}
+              />
             </Route>
           </Route>
         </Route>

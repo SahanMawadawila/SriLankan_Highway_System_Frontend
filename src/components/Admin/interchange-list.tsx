@@ -1,7 +1,6 @@
 import { InterchangeColumn } from "./interchange-column";
 
 interface Interchange {
-  id: string;
   name: string;
   details: string;
   imageUrl: string;
@@ -18,13 +17,13 @@ export function InterchangeList({
 }: InterchangeListProps) {
   return (
     <div className="space-y-4">
-      {cities.map((Interchange) => (
+      {cities.map((Interchange, key) => (
         <InterchangeColumn
-          key={Interchange.id}
+          key={key}
           name={Interchange.name}
           details={Interchange.details}
           imageUrl={Interchange.imageUrl}
-          onClick={() => onInterchangeClick(Interchange.id)}
+          onClick={() => onInterchangeClick(Interchange.name)}
         />
       ))}
     </div>

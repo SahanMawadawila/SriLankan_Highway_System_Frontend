@@ -18,7 +18,15 @@ export function InterchangeColumn({
       className="cursor-pointer transition-all hover:shadow-lg"
       onClick={onClick}
     >
-      <CardContent className="p-6 flex justify-between items-center">
+      <CardContent
+        className="p-4 flex justify-between items-center "
+        /* style={{
+          backgroundImage: `url(${imageUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }} */
+      >
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-2">{name}</h2>
           <p className="text-muted-foreground">{details}</p>
@@ -27,9 +35,8 @@ export function InterchangeColumn({
           <img
             src={imageUrl || "/placeholder.svg"}
             alt={`View of ${name}`}
-            width={100}
-            height={100}
-            className="rounded-lg object-cover"
+            className="rounded-lg 
+            object-cover h-32 w-64"
           />
         </div>
       </CardContent>

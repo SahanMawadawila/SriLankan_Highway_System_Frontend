@@ -4,47 +4,25 @@ import { useAxiosPrivateWithAccessToken } from "../../hooks/axios-private-with-a
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "../../components/ui/pagination";
+import { Button } from "../../components/ui/button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const cities = [
-  {
-    id: "1",
-    name: "New York",
-    details:
-      "The city that never sleeps, known for its iconic skyline and diverse culture.",
-    imageUrl:
-      "https://th.bing.com/th/id/R.af364a49971ed89b3abfdb1e614a7d34?rik=EtCfPfyT6iLI2Q&riu=http%3a%2f%2fwww.exway.rda.gov.lk%2fexpressway%2fresources%2fslider%2fslider1%2fdata1%2fimages%2fe02%2f1.jpg&ehk=5n32rWjXLBe47KfkAro7%2bisybCLFpYBhDDb0f8gWNvs%3d&risl=&pid=ImgRaw&r=0",
-  },
-  {
-    id: "2",
-    name: "London",
-    details:
-      "A historic city blending tradition with modernity, famous for its landmarks and museums.",
-    imageUrl:
-      "https://tse4.mm.bing.net/th?id=OIP.LMkHH7TOQXZ8DXLSuZk2GAHaEM&rs=1&pid=ImgDetMain",
-  },
-  {
-    id: "3",
-    name: "Tokyo",
-    details:
-      "A bustling metropolis where cutting-edge technology meets ancient traditions.",
-    imageUrl: "/placeholder.svg?height=100&width=100",
-  },
-  {
-    id: "4",
-    name: "Paris",
-    details:
-      "The City of Light, renowned for its art, fashion, and culinary scene.",
-    imageUrl: "/placeholder.svg?height=100&width=100",
-  },
-];
 export const Intercxhanges = () => {
   const axiosPrivateWithAccessToken = useAxiosPrivateWithAccessToken();
+  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+  const itemsPerPage = 10;
+
+  const handlePrevious = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   const getInterchanges = async () => {
     const response = await axiosPrivateWithAccessToken.get(
@@ -58,25 +36,48 @@ export const Intercxhanges = () => {
     queryFn: getInterchanges,
   });
 
+  if (isLoading) return <div>Loading...</div>;
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems =
+    endIndex > data.length
+      ? data.slice(startIndex)
+      : data.slice(startIndex, endIndex);
+
   return (
     <>
       <InterchangeList
-        cities={cities}
-        onInterchangeClick={(InterchangeId) => console.log(InterchangeId)}
+        cities={currentItems}
+        onInterchangeClick={(InterchangeName) =>
+          navigate(`/admin/interchanges/${InterchangeName}`)
+        }
       />
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" />
+            <Button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              variant="outline"
+            >
+              Previous
+            </Button>
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
+            <Button variant="outline" disabled>
+              {currentPage}
+            </Button>
           </PaginationItem>
           <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
+            <Button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              variant="outline"
+            >
+              Next
+            </Button>
           </PaginationItem>
         </PaginationContent>
       </Pagination>
